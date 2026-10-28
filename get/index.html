@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Vesta</title>
+<style>
+  body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #FAF6F0; color: #2B2420; }
+  main { max-width: 420px; margin: 0 auto; padding: 48px 20px; text-align: center; }
+  h1 { font-size: 28px; margin: 0 0 8px; }
+  p { line-height: 1.5; margin: 0 0 24px; color: #5C524B; }
+  a.btn { display: block; padding: 16px; margin: 0 0 12px; border-radius: 14px; background: #B5482A; color: #fff; text-decoration: none; font-weight: 600; font-size: 17px; }
+  a.btn.alt { background: #526A7A; }
+  .soon { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Get Vesta</h1>
+  <p>Install Vesta, then sign in with the phone number your invite was sent to.<br>
+  Vesta इंस्टॉल करें, फिर उसी नंबर से साइन इन करें जिस पर निमंत्रण आया है।</p>
+  <a class="btn" id="android" href="">Android phone</a>
+  <a class="btn alt" id="iphone" href="">iPhone</a>
+  <p class="soon" id="soon">The iPhone link is coming soon. Please ask the person who invited you.<br>
+  iPhone लिंक जल्द आ रहा है। जिसने बुलाया है उनसे पूछें।</p>
+</main>
+<script>
+  // Beta links. At the public launch, change these to the store pages:
+  // Android https://play.google.com/store/apps/details?id=com.bagasrawala.vesta
+  // iPhone  https://apps.apple.com/app/id6827950988
+  var ANDROID = 'https://play.google.com/apps/testing/com.bagasrawala.vesta';
+  var IPHONE = ''; // TestFlight public link, once Apple approves it
+
+  document.getElementById('android').href = ANDROID;
+  var iphone = document.getElementById('iphone');
+  if (IPHONE) iphone.href = IPHONE;
+  else iphone.onclick = function (e) { e.preventDefault(); document.getElementById('soon').style.display = 'block'; };
+
+  var ua = navigator.userAgent;
+  if (/Android/i.test(ua)) location.replace(ANDROID);
+  else if (/iPhone|iPad|iPod/i.test(ua) && IPHONE) location.replace(IPHONE);
+</script>
+</body>
+</html>
