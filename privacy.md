@@ -5,7 +5,7 @@ permalink: /privacy/
 
 # Vesta privacy policy
 
-_Last updated: 28 October 2026_
+_Last updated: 29 October 2026_
 
 Vesta is a chat app for running a home: the family and the people who work in
 the home (cook, driver, cleaners and others) share chats, a grocery list and
@@ -15,8 +15,10 @@ Mumbai, India ("we"). Contact: vesta.app.help@gmail.com.
 
 ## What we collect
 
-- **Your phone number.** You sign in with it. We send a one-time code to it on
-  WhatsApp or by SMS.
+- **Your email address or phone number.** You sign in with it. Owners get a
+  one-time code by email; staff and family who were invited sign in with the
+  code from their invite; accounts made by phone can still get a code by SMS.
+  Your email is not shown to anyone in your home.
 - **Your name and language**, as you or your home's admin enter them.
 - **Phone numbers of people you invite**, with the name and role you give
   them, so they can join your home when they sign in. If they never join, the
@@ -81,7 +83,8 @@ anything about your home.
   - YouTube (the title and description of a recipe video someone shares).
     For other shared links, our server opens the link once to show its title
     and picture, as most chat apps do.
-  - Meta WhatsApp and our SMS provider (sign-in codes)
+  - Google Gmail (sends sign-in codes by email), and Meta WhatsApp and our SMS
+    provider (sign-in codes by phone)
   - Expo, Apple and Google (delivering notifications)
   - Sentry (crash reports)
   - RevenueCat (keeps track of Vesta Plus purchases made through Apple and
@@ -117,7 +120,7 @@ number, name, language and notification settings straight away.
   all its chats, photos, voice notes, list and tasks.
 
 If you cannot open the app, email vesta.app.help@gmail.com from any address with the
-phone number you signed in with, and we will delete the account within 7 days.
+email or phone number you signed in with, and we will delete the account within 7 days.
 
 ## Your rights
 
