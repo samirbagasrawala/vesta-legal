@@ -11,34 +11,74 @@
   p { line-height: 1.5; margin: 0 0 24px; color: #5C524B; }
   a.btn { display: block; padding: 16px; margin: 0 0 12px; border-radius: 14px; background: #B5482A; color: #fff; text-decoration: none; font-weight: 600; font-size: 17px; }
   a.btn.alt { background: #526A7A; }
-  .soon { display: none; }
+  .soon, .invite { display: none; }
+  .code { font-size: 22px; letter-spacing: 2px; font-weight: 700; color: #2B2420; }
 </style>
 </head>
 <body>
 <main>
   <h1>Get Vesta</h1>
-  <p>Install Vesta, then sign in with the phone number your invite was sent to.<br>
-  Vesta इंस्टॉल करें, फिर उसी नंबर से साइन इन करें जिस पर निमंत्रण आया है।</p>
-  <a class="btn" id="android" href="">Android phone</a>
-  <a class="btn alt" id="iphone" href="">iPhone</a>
+  <div id="plain">
+    <p>Install Vesta, then sign in with the phone number your invite was sent to.<br>
+    Vesta इंस्टॉल करें, फिर उसी नंबर से साइन इन करें जिस पर निमंत्रण आया है।</p>
+    <a class="btn" id="android" href="">Android phone</a>
+    <a class="btn alt" id="iphone" href="">iPhone</a>
+  </div>
+  <div class="invite" id="invite">
+    <p>Tap the button to join your home. If Vesta is not installed yet, install it first, then come back and tap again.<br>
+    बटन दबाकर अपने घर से जुड़ें। Vesta इंस्टॉल नहीं है तो पहले इंस्टॉल करें, फिर वापस आकर दोबारा दबाएँ।</p>
+    <a class="btn" id="open" href="">Open Vesta and join · Vesta खोलें</a>
+    <a class="btn alt" id="install" href="">Install Vesta · इंस्टॉल करें</a>
+    <p>Invite code · इनवाइट कोड<br><span class="code" id="code"></span></p>
+  </div>
   <p class="soon" id="soon">The iPhone link is coming soon. Please ask the person who invited you.<br>
   iPhone लिंक जल्द आ रहा है। जिसने बुलाया है उनसे पूछें।</p>
 </main>
 <script>
-  // Beta links. At the public launch, change these to the store pages:
+  // Beta links. At the public launch, change these to the store pages and set
+  // STORE_LIVE, so a new Android install joins by itself (Play passes the code
+  // to the app as the install referrer):
   // Android https://play.google.com/store/apps/details?id=com.bagasrawala.vesta
   // iPhone  https://apps.apple.com/app/id6827950988
   var ANDROID = 'https://play.google.com/apps/internaltest/4700470672387622288'; // internal test; closed test: https://play.google.com/apps/testing/com.bagasrawala.vesta
   var IPHONE = ''; // TestFlight public link, once Apple approves it
-
-  document.getElementById('android').href = ANDROID;
-  var iphone = document.getElementById('iphone');
-  if (IPHONE) iphone.href = IPHONE;
-  else iphone.onclick = function (e) { e.preventDefault(); document.getElementById('soon').style.display = 'block'; };
+  var STORE_LIVE = false;
+  var PACKAGE = 'com.bagasrawala.vesta';
 
   var ua = navigator.userAgent;
-  if (/Android/i.test(ua)) location.replace(ANDROID);
-  else if (/iPhone|iPad|iPod/i.test(ua) && IPHONE) location.replace(IPHONE);
+  var isAndroid = /Android/i.test(ua);
+  var isIphone = /iPhone|iPad|iPod/i.test(ua);
+  var match = /[?&]c=([A-Za-z0-9-]{8,9})/.exec(location.search);
+  var code = match ? match[1].replace(/-/g, '').toUpperCase() : '';
+
+  function soon(e) { e.preventDefault(); document.getElementById('soon').style.display = 'block'; }
+
+  if (code) {
+    var pretty = code.slice(0, 4) + '-' + code.slice(4);
+    var androidInstall = STORE_LIVE
+      ? 'https://play.google.com/store/apps/details?id=' + PACKAGE + '&referrer=' + encodeURIComponent('invite=' + code)
+      : ANDROID;
+    var install = isIphone ? IPHONE : androidInstall;
+    var open = isAndroid
+      ? 'intent://join?c=' + code + '#Intent;scheme=vesta;package=' + PACKAGE +
+        ';S.browser_fallback_url=' + encodeURIComponent(androidInstall) + ';end'
+      : 'vesta://join?c=' + code;
+    document.getElementById('plain').style.display = 'none';
+    document.getElementById('invite').style.display = 'block';
+    document.getElementById('code').textContent = pretty;
+    document.getElementById('open').href = open;
+    var installBtn = document.getElementById('install');
+    if (install) installBtn.href = install; else installBtn.onclick = soon;
+    // Android: try the app straight away; without it, Android goes to the
+    // install page by itself.
+    if (isAndroid) location.href = open;
+  } else {
+    document.getElementById('android').href = ANDROID;
+    var iphone = document.getElementById('iphone');
+    if (IPHONE) iphone.href = IPHONE; else iphone.onclick = soon;
+    if (isAndroid) location.replace(ANDROID);
+    else if (isIphone && IPHONE) location.replace(IPHONE);
+  }
 </script>
 </body>
 </html>
