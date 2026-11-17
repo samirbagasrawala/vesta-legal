@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Vesta Console">
+<meta name="theme-color" content="#FFF9F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1714" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.png">
+<link rel="manifest" href="manifest.json">
+<title>Vesta Console</title>
+<style>
+:root {
+  --bg: #FFF9F2; --card: #FFFFFF; --ink: #2A211C; --muted: #7A6A60; --line: #EDE2D6;
+  --brand: #B5482A; --blue: #2D5B88; --sky: #6A98C8; --apricot: #FCE3D0; --honey: #FDF0CF;
+  --ok: #2F7D4F; --bad: #B3261E; --chip: #F6EDE3;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1B1714; --card: #26201C; --ink: #F4ECE4; --muted: #B3A396; --line: #3A312B;
+    --brand: #E07A5A; --blue: #7FA8D6; --sky: #6A98C8; --apricot: #4A2E22; --honey: #3F3420;
+    --ok: #6FC08E; --bad: #F28B82; --chip: #332A24;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body {
+  font: 16px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  padding: env(safe-area-inset-top) 0 calc(72px + env(safe-area-inset-bottom));
+}
+header { display: flex; align-items: center; gap: 10px; padding: 14px 16px 6px; }
+header img { width: 32px; height: 32px; border-radius: 8px; }
+header h1 { font-size: 20px; margin: 0; flex: 1; }
+header button { font-size: 14px; }
+main { padding: 0 16px; max-width: 900px; margin: 0 auto; }
+h2 { font-size: 17px; margin: 22px 0 8px; }
+.sub { color: var(--muted); font-size: 13px; }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (min-width: 640px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
+.tile .n { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tile .l { color: var(--muted); font-size: 13px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
+.row { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.row b { font-weight: 600; }
+.chip { display: inline-block; background: var(--chip); border-radius: 999px; padding: 1px 8px; font-size: 12px; color: var(--muted); margin: 2px 4px 0 0; }
+.chip.brand { background: var(--apricot); color: var(--brand); }
+.chip.blue { background: var(--honey); color: var(--blue); }
+.chart { width: 100%; height: 90px; display: block; }
+.chart rect { fill: var(--sky); }
+.chart rect.today { fill: var(--brand); }
+.chart text { fill: var(--muted); font-size: 10px; }
+button, .btn {
+  font: inherit; border: 0; border-radius: 10px; padding: 10px 14px; background: var(--brand); color: #fff;
+  font-weight: 600; cursor: pointer; min-height: 44px;
+}
+button.ghost { background: transparent; color: var(--brand); padding: 6px 8px; min-height: 0; }
+button.small { padding: 6px 10px; min-height: 32px; font-size: 14px; }
+button:disabled { opacity: .5; }
+input, select {
+  font: inherit; font-size: 16px; width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); margin: 4px 0 10px;
+}
+label { font-size: 14px; color: var(--muted); }
+.search { margin-top: 10px; }
+nav {
+  position: fixed; left: 0; right: 0; bottom: 0; display: flex; background: var(--card); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom); z-index: 5;
+}
+nav button {
+  flex: 1; background: none; color: var(--muted); border-radius: 0; font-size: 12px; font-weight: 600; padding: 8px 0 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+nav button span { font-size: 20px; line-height: 1; }
+nav button.on { color: var(--brand); }
+nav .dot { background: var(--bad); color: #fff; border-radius: 999px; font-size: 10px; padding: 0 5px; margin-left: 2px; }
+.center { max-width: 380px; margin: 12vh auto 0; padding: 0 16px; text-align: center; }
+.center img { width: 72px; height: 72px; border-radius: 18px; }
+.center form { text-align: left; margin-top: 18px; }
+.msg { margin: 10px 0; padding: 10px 12px; border-radius: 10px; background: var(--honey); font-size: 14px; }
+.msg.bad { background: var(--apricot); color: var(--bad); }
+.hidden { display: none !important; }
+.err { color: var(--bad); }
+.legend { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; }
+.list-empty { color: var(--muted); padding: 14px 0; }
+.small-print { color: var(--muted); font-size: 12px; margin: 14px 0; }
+</style>
+</head>
+<body>
+
+<div id="signin" class="center hidden">
+  <img src="apple-touch-icon.png" alt="">
+  <h1>Vesta Console</h1>
+  <p class="sub">For the owner only.</p>
+  <form id="email-form">
+    <label for="email">Your email</label>
+    <input id="email" type="email" autocomplete="email" inputmode="email" required>
+    <button type="submit" style="width:100%">Send me a code</button>
+  </form>
+  <form id="code-form" class="hidden">
+    <label for="code">The code from your email</label>
+    <input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required>
+    <button type="submit" style="width:100%">Sign in</button>
+    <button type="button" class="ghost" id="back">Use a different email</button>
+  </form>
+  <div id="signin-msg" class="msg hidden"></div>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <img src="apple-touch-icon.png" alt="">
+    <h1 id="title">Today</h1>
+    <button class="ghost" id="refresh">Refresh</button>
+  </header>
+  <main>
+    <div id="top-msg" class="msg hidden"></div>
+    <section id="tab-today"></section>
+    <section id="tab-homes" class="hidden"></section>
+    <section id="tab-people" class="hidden"></section>
+    <section id="tab-problems" class="hidden"></section>
+    <section id="tab-admin" class="hidden"></section>
+  </main>
+  <nav>
+    <button data-tab="today" class="on"><span>◎</span>Today</button>
+    <button data-tab="homes"><span>⌂</span>Homes</button>
+    <button data-tab="people"><span>☺</span>People</button>
+    <button data-tab="problems"><span>!</span><div>Problems<b id="problem-dot" class="dot hidden"></b></div></button>
+    <button data-tab="admin"><span>⚙</span>Admin</button>
+  </nav>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script>
+// Public address and public (publishable) key of Vesta's Supabase. Safe to be
+// here: they only allow what a signed-in person may do. All owner data comes
+// from the owner-console function, which answers only the owner's email.
+const SUPABASE_URL = 'https://wdwgsklekzcaolurugik.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WuP1PHHlfOGe2aPFckVwLQ_rWu5SDKY';
+const FN = SUPABASE_URL + '/functions/v1/owner-console';
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, storageKey: 'vesta-console' },
+});
+
+const $ = (id) => document.getElementById(id);
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const num = (n) => (n ?? 0).toLocaleString('en-IN');
+const inr = (n) => '₹' + (n ?? 0).toLocaleString('en-IN', { maximumFractionDigits: n >= 100 ? 0 : 2, minimumFractionDigits: 0 });
+const when = (iso) => {
+  if (!iso) return '—';
+  const d = new Date(iso), mins = (Date.now() - d) / 60000;
+  if (mins < 1) return 'just now';
+  if (mins < 60) return Math.round(mins) + ' min ago';
+  if (mins < 60 * 24) return Math.round(mins / 60) + ' h ago';
+  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata' });
+};
+const day = (iso) => iso ? new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }) : '—';
+
+let report = null;
+let tab = 'today';
+let email = '';
+
+// ---------- Sign-in ----------
+function show(id) {
+  $('signin').classList.toggle('hidden', id !== 'signin');
+  $('app').classList.toggle('hidden', id !== 'app');
+}
+function signinMsg(text, bad) {
+  const el = $('signin-msg');
+  el.textContent = text;
+  el.className = 'msg' + (bad ? ' bad' : '');
+  el.classList.toggle('hidden', !text);
+}
+$('email-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  email = $('email').value.trim().toLowerCase();
+  const btn = e.submitter; btn.disabled = true;
+  const { error } = await db.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  btn.disabled = false;
+  if (error) return signinMsg('Could not send a code: ' + error.message, true);
+  $('email-form').classList.add('hidden');
+  $('code-form').classList.remove('hidden');
+  $('code').focus();
+  signinMsg('Code sent to ' + email + '. It can take a minute.');
+});
+$('code-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.submitter; btn.disabled = true;
+  const { error } = await db.auth.verifyOtp({ email, token: $('code').value.trim(), type: 'email' });
+  btn.disabled = false;
+  if (error) return signinMsg('That code did not work: ' + error.message, true);
+  signinMsg('');
+  start();
+});
+$('back').addEventListener('click', () => {
+  $('code-form').classList.add('hidden');
+  $('email-form').classList.remove('hidden');
+  signinMsg('');
+});
+
+// ---------- Talking to the server ----------
+async function call(body) {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) { show('signin'); throw new Error('Signed out'); }
+  const res = await fetch(FN, {
+    method: 'POST',
+    headers: { authorization: 'Bearer ' + session.access_token, apikey: SUPABASE_KEY, 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const json = await res.json().catch(() => ({}));
+  if (res.status === 403) {
+    await db.auth.signOut();
+    show('signin');
+    signinMsg('This email is not allowed to use the console.', true);
+    throw new Error('not_owner');
+  }
+  if (!res.ok) throw new Error(json.error || ('Error ' + res.status));
+  return json;
+}
+
+function topMsg(text, bad) {
+  const el = $('top-msg');
+  el.textContent = text;
+  el.className = 'msg' + (bad ? ' bad' : '');
+  el.classList.toggle('hidden', !text);
+}
+
+async function load() {
+  $('refresh').disabled = true;
+  $('refresh').textContent = 'Loading…';
+  try {
+    report = await call({ action: 'report' });
+    topMsg(report.errors?.length ? 'Some numbers could not load: ' + report.errors.join('; ') : '', true);
+    render();
+  } catch (err) {
+    if (err.message !== 'not_owner' && err.message !== 'Signed out') topMsg('Could not load: ' + err.message, true);
+  } finally {
+    $('refresh').disabled = false;
+    $('refresh').textContent = 'Refresh';
+  }
+}
+
+// ---------- Screens ----------
+function tile(n, label) { return `<div class="tile"><div class="n">${n}</div><div class="l">${esc(label)}</div></div>`; }
+
+function bars(series, key, fmt) {
+  const w = 300, h = 70, max = Math.max(1, ...series.map((d) => d[key] || 0));
+  const bw = w / series.length;
+  const rects = series.map((d, i) => {
+    const v = d[key] || 0, bh = Math.max(v ? 2 : 0, (v / max) * h);
+    return `<rect class="${i === series.length - 1 ? 'today' : ''}" x="${(i * bw + 1).toFixed(1)}" y="${(h - bh).toFixed(1)}" width="${(bw - 2).toFixed(1)}" height="${bh.toFixed(1)}" rx="1.5"><title>${esc(d.day)}: ${esc(fmt(v))}</title></rect>`;
+  }).join('');
+  const total = series.reduce((s, d) => s + (d[key] || 0), 0);
+  return `<svg class="chart" viewBox="0 0 ${w} ${h + 2}" preserveAspectRatio="none">${rects}</svg>
+    <div class="legend"><span>30 days ago</span><span>Total ${esc(fmt(total))} · Top day ${esc(fmt(max))}</span><span>Today</span></div>`;
+}
+
+function renderToday() {
+  const t = report.totals || {}, ai = report.ai || { inr: {} }, p = report.platforms || {};
+  let html = `<div class="sub">Updated ${when(report.generated_at)}</div>
+  <h2>People</h2><div class="tiles">
+    ${tile(num(t.people), 'signed up')}
+    ${tile(num(t.people_new_7d), 'new this week')}
+    ${tile(num(t.people_active_7d), 'sent a message this week')}
+    ${tile(num(t.people_signed_in_7d), 'signed in this week')}
+  </div>
+  <h2>Homes</h2><div class="tiles">
+    ${tile(num(t.homes), 'homes')}
+    ${tile(num(t.homes_active_7d), 'active this week')}
+    ${tile(num(t.family), 'family members')}
+    ${tile(num(t.staff), 'staff')}
+  </div>
+  <h2>Messages</h2><div class="tiles">
+    ${tile(num(t.messages_today), 'today')}
+    ${tile(num(t.messages_7d), 'this week')}
+    ${tile(num(t.messages_total), 'all time')}
+    ${tile(num(ai.runs_7d), 'AI readings this week')}
+  </div>
+  <h2>AI cost</h2><div class="tiles">
+    ${tile(inr(ai.inr?.today), 'today')}
+    ${tile(inr(ai.inr?.d7), 'last 7 days')}
+    ${tile(inr(ai.inr?.d30), 'last 30 days')}
+    ${tile(t.homes ? inr((ai.inr?.d30 || 0) / t.homes) : '—', 'per home, 30 days')}
+  </div>`;
+  if (report.ai_models?.length) {
+    html += `<div class="card">${report.ai_models.map((m) => `<div class="row"><span>${esc(m.model)} <span class="chip">${num(m.runs)} ${m.runs === 1 ? 'run' : 'runs'}</span></span><b>${inr(m.inr)}</b></div>`).join('')}</div>`;
+  }
+  html += `<p class="small-print">Estimated from logged readings at $1 = ₹${esc(ai.usd_inr)}. Voice transcription (Sarvam) and cache writes are not included.</p>
+  <h2>Phones</h2><div class="tiles">
+    ${tile(num(p.iphone), 'iPhone')}
+    ${tile(num(p.android), 'Android')}
+    ${tile(num(p.both), 'both')}
+    ${tile(num(p.unknown), 'not known yet')}
+  </div>`;
+  if (report.daily?.length) {
+    html += `<h2>Last 30 days</h2>
+    <div class="card"><b>Sign-ups</b>${bars(report.daily, 'signups', num)}</div>
+    <div class="card"><b>Messages</b>${bars(report.daily, 'messages', num)}</div>
+    <div class="card"><b>Active homes</b>${bars(report.daily, 'active_homes', num)}</div>
+    <div class="card"><b>AI cost</b>${bars(report.daily, 'ai_inr', inr)}</div>`;
+  }
+  $('tab-today').innerHTML = html;
+}
+
+const planChip = (h) => {
+  if (h.plan === 'gift') return `<span class="chip blue">gift${h.gift_until ? '' : ''}</span>`;
+  if (h.plan === 'subscription') return `<span class="chip brand">paid</span>`;
+  if (h.plan === 'trial') return `<span class="chip">trial to ${esc(day(h.trial_ends_at))}</span>`;
+  if (h.plan === 'referral') return `<span class="chip">referral month</span>`;
+  return h.plan === null && 'plan' in h ? `<span class="chip">no plan</span>` : '';
+};
+
+function renderHomes() {
+  const homes = report.homes || [];
+  const q = ($('home-q')?.value || '').toLowerCase();
+  const list = homes.filter((h) => !q || (h.name + ' ' + h.owner).toLowerCase().includes(q));
+  const keep = $('home-q')?.value || '';
+  $('tab-homes').innerHTML = `<input id="home-q" class="search" type="search" placeholder="Search ${homes.length} homes" value="${esc(keep)}">
+  ${list.map((h) => `<div class="card">
+    <div class="row"><b>${esc(h.name)}</b><span class="sub">${when(h.last_message_at)}</span></div>
+    <div class="sub">Owner ${esc(h.owner || '—')} · started ${esc(day(h.created_at))}</div>
+    <div>${planChip(h)}<span class="chip">${num(h.family)} family</span><span class="chip">${num(h.staff)} staff</span><span class="chip">${num(h.messages_7d)} msgs this week</span><span class="chip">${num(h.messages_total)} all time</span><span class="chip">AI ${inr(h.ai_inr_30d)} / 30 days</span></div>
+  </div>`).join('') || '<div class="list-empty">No homes.</div>'}`;
+  const input = $('home-q');
+  input.addEventListener('input', () => { renderHomes(); const i = $('home-q'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); });
+}
+
+function renderPeople() {
+  const people = report.people || [];
+  const keep = $('people-q')?.value || '';
+  const q = keep.toLowerCase();
+  const list = people.filter((p) => !q || [p.name, p.email, p.phone, p.home, p.role].join(' ').toLowerCase().includes(q));
+  $('tab-people').innerHTML = `<input id="people-q" class="search" type="search" placeholder="Search ${people.length} people" value="${esc(keep)}">
+  ${list.map((p) => `<div class="card">
+    <div class="row"><b>${esc(p.name)}</b><span class="sub">${esc(p.role)}</span></div>
+    <div class="sub">${esc(p.home)}${p.status === 'left' ? ' · <span class="err">left</span>' : ''}</div>
+    <div class="sub">${esc([p.email, p.phone].filter(Boolean).join(' · '))}</div>
+    <div><span class="chip">joined ${esc(day(p.joined_at))}</span><span class="chip">last sign-in ${esc(when(p.last_sign_in_at))}</span>${p.phone_type ? `<span class="chip">${esc(p.phone_type)}</span>` : ''}<span class="chip">${num(p.messages_7d)} msgs this week</span></div>
+  </div>`).join('') || '<div class="list-empty">No one matches.</div>'}`;
+  $('people-q').addEventListener('input', () => { renderPeople(); const i = $('people-q'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); });
+}
+
+function renderProblems() {
+  const pr = report.problems || {};
+  const media = pr.stuck_media || [], msgs = pr.stuck_messages || [], errs = pr.ai_errors || [];
+  const count = media.length + msgs.length;
+  $('problem-dot').textContent = count;
+  $('problem-dot').classList.toggle('hidden', !count);
+  $('tab-problems').innerHTML = `
+  <h2>Stuck photos and voice notes <span class="sub">(last 7 days)</span></h2>
+  ${media.map((a) => `<div class="card"><div class="row"><b>${esc(a.kind)} from ${esc(a.sender || 'someone')}</b><span class="sub">${when(a.created_at)}</span></div>
+    <div class="sub">${esc(a.home)} · ${esc(a.status)} after ${num(a.attempts)} tries</div>
+    <button class="small" data-retry-media="${esc(a.id)}">Read it again</button></div>`).join('') || '<div class="list-empty">Nothing stuck. 👍</div>'}
+  <h2>Messages the AI did not read <span class="sub">(last 7 days)</span></h2>
+  ${msgs.map((m) => `<div class="card"><div class="row"><b>${esc(m.sender || 'someone')}</b><span class="sub">${when(m.created_at)}</span></div>
+    <div>${esc(m.body) || '<span class="sub">(no text)</span>'}</div>
+    <div class="sub">${esc(m.home)} · ${esc(m.status)}</div>
+    <button class="small" data-retry-message="${esc(m.id)}">Read it again</button></div>`).join('') || '<div class="list-empty">Nothing stuck. 👍</div>'}
+  <h2>AI errors <span class="sub">(last 48 hours)</span></h2>
+  ${errs.map((e) => `<div class="card"><div class="row"><b>${esc(e.home || '—')}</b><span class="sub">${when(e.created_at)}</span></div>
+    <div class="sub">${esc(e.model || '')}</div><div class="err">${esc(e.error)}</div></div>`).join('') || '<div class="list-empty">No errors. 👍</div>'}`;
+  document.querySelectorAll('[data-retry-media]').forEach((b) => b.addEventListener('click', () => run(b, { action: 'retry_media', id: b.dataset.retryMedia })));
+  document.querySelectorAll('[data-retry-message]').forEach((b) => b.addEventListener('click', () => run(b, { action: 'retry_message', id: b.dataset.retryMessage })));
+}
+
+function renderAdmin() {
+  const gifts = report.gifts || [];
+  const homes = report.homes || [];
+  $('tab-admin').innerHTML = `
+  <h2>Give Plus free</h2>
+  <form class="card" id="give-form">
+    <label for="give-phone">Phone number with country code</label>
+    <input id="give-phone" type="tel" placeholder="+91 98xxx xxxxx" required>
+    <label for="give-days">How many days (leave blank for life)</label>
+    <input id="give-days" type="number" min="1" max="3650" inputmode="numeric" placeholder="For life">
+    <button type="submit">Give Plus</button>
+  </form>
+  <h2>Gifts given</h2>
+  ${gifts.map((g) => `<div class="card"><div class="row"><b>${esc(g.phone)}</b><span class="sub">${g.until ? 'until ' + esc(day(g.until)) : 'for life'}</span></div>
+    <div class="sub">${esc(g.name || 'not signed up yet')}</div>
+    <button class="small ghost" data-take="${esc(g.phone)}">Take it back</button></div>`).join('') || '<div class="list-empty">No gifts yet.</div>'}
+  <h2>Give a home more trial days</h2>
+  <form class="card" id="trial-form">
+    <label for="trial-home">Home</label>
+    <select id="trial-home">${homes.map((h) => `<option value="${esc(h.id)}">${esc(h.name)} (${esc(h.owner || '—')})</option>`).join('')}</select>
+    <label for="trial-days">Extra days</label>
+    <input id="trial-days" type="number" min="1" max="365" value="14" inputmode="numeric" required>
+    <button type="submit">Add days</button>
+  </form>
+  <h2>You</h2>
+  <div class="card"><div class="sub" id="me"></div><button class="small ghost" id="signout">Sign out</button></div>`;
+  db.auth.getUser().then(({ data }) => { const el = $('me'); if (el) el.textContent = 'Signed in as ' + (data.user?.email || ''); });
+  $('signout').addEventListener('click', async () => { await db.auth.signOut(); show('signin'); });
+  $('give-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const phone = $('give-phone').value, days = $('give-days').value;
+    if (!confirm(`Give Plus to ${phone} ${days ? 'for ' + days + ' days' : 'for life'}?`)) return;
+    run(e.submitter, { action: 'give_plus', phone, days: days || null });
+  });
+  $('trial-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const sel = $('trial-home');
+    if (!sel.value) return;
+    if (!confirm(`Add ${$('trial-days').value} trial days to ${sel.options[sel.selectedIndex].text}?`)) return;
+    run(e.submitter, { action: 'extend_trial', household_id: sel.value, days: Number($('trial-days').value) });
+  });
+  document.querySelectorAll('[data-take]').forEach((b) => b.addEventListener('click', () => {
+    if (!confirm(`Take Plus back from ${b.dataset.take}?`)) return;
+    run(b, { action: 'take_plus', phone: b.dataset.take });
+  }));
+}
+
+async function run(button, body) {
+  button.disabled = true;
+  try {
+    const res = await call(body);
+    await load();
+    topMsg(res.message || 'Done.');
+  } catch (err) {
+    if (err.message !== 'not_owner') topMsg(err.message, true);
+  } finally {
+    button.disabled = false;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const TITLES = { today: 'Today', homes: 'Homes', people: 'People', problems: 'Problems', admin: 'Admin' };
+function render() {
+  if (!report) return;
+  renderProblems();
+  ({ today: renderToday, homes: renderHomes, people: renderPeople, problems: () => {}, admin: renderAdmin })[tab]();
+}
+document.querySelectorAll('nav button').forEach((b) => b.addEventListener('click', () => {
+  tab = b.dataset.tab;
+  document.querySelectorAll('nav button').forEach((x) => x.classList.toggle('on', x === b));
+  Object.keys(TITLES).forEach((k) => $('tab-' + k).classList.toggle('hidden', k !== tab));
+  $('title').textContent = TITLES[tab];
+  try { localStorage.setItem('vesta-console-tab', tab); } catch {}
+  render();
+  window.scrollTo(0, 0);
+}));
+$('refresh').addEventListener('click', load);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && report && Date.now() - Date.parse(report.generated_at) > 5 * 60000) load(); });
+
+async function start() {
+  show('app');
+  try {
+    const saved = localStorage.getItem('vesta-console-tab');
+    if (saved && TITLES[saved]) document.querySelector(`nav button[data-tab="${saved}"]`).click();
+  } catch {}
+  await load();
+}
+
+db.auth.getSession().then(({ data: { session } }) => session ? start() : show('signin'));
+</script>
+</body>
+</html>
