@@ -41,7 +41,7 @@ Mumbai, India ("we"). Contact: vesta.app.help@gmail.com.
   or staff, never what is on the screen.
 - **Crash reports**: what went wrong, the phone model and app version. No
   message text and no name or phone number.
-- **Vesta Plus purchases**: whether you have Plus and until when. Apple or
+- **Vesta subscription purchases**: whether you have a subscription and until when. Apple or
   Google takes the payment; we never see your card or UPI details. When a
   plan ends, the home locks but nothing is deleted.
 - **Delivery app sign-ins**, only if an owner connects a delivery app on the
@@ -87,7 +87,7 @@ anything about your home.
     provider (sign-in codes by phone)
   - Expo, Apple and Google (delivering notifications)
   - Sentry (crash reports)
-  - RevenueCat (keeps track of Vesta Plus purchases made through Apple and
+  - RevenueCat (keeps track of Vesta subscriptions made through Apple and
     Google)
   - Delivery apps you choose to connect (Zepto, Swiggy Instamart), which get
     the items you send to their basket

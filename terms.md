@@ -27,18 +27,18 @@ important (amounts, medicines, payments) yourself.
   are removed lose access to that home's chats.
 - You must be old enough to make a contract where you live (18 in India).
 
-## Vesta Plus (the paid plan)
+## The Vesta subscription
 
 - Vesta is paid. A new home gets **30 days free**. After the free period,
-  Vesta Plus costs the price shown in the app (in India, ₹299 a month or
+  the Vesta subscription costs the price shown in the app (in India, ₹299 a month or
   ₹2,999 a year). Prices in other countries are shown in local currency by
   Apple or Google before you buy.
 - One plan covers one home: the person who pays, 1 co-owner and 5 staff.
   More people can be added with the "Extra people" add-on at the price shown
   in the app.
 - **Payment is taken by Apple (App Store) or Google (Google Play)** from the
-  account you buy with, when you confirm the purchase, or at the end of the
-  free trial if you do not cancel before it ends.
+  account you buy with, when you confirm the purchase. The 30 free days need
+  no payment and end on their own.
 - **Your subscription renews automatically** for the same period and price
   unless you turn off auto-renew at least 24 hours before the end of the
   current period. Your account is charged for the renewal within 24 hours
@@ -46,9 +46,9 @@ important (amounts, medicines, payments) yourself.
 - You can manage or cancel your subscription at any time in your phone's
   settings: on iPhone, Settings → your name → Subscriptions; on Android,
   Play Store → Payments & subscriptions → Subscriptions. Cancelling stops the
-  next renewal; you keep Plus until the end of the period you paid for.
+  next renewal; you keep Vesta until the end of the period you paid for.
 - Refunds are handled by Apple or Google under their own rules.
-- If Plus ends, the home locks: Settings stays open and nothing is deleted
+- If your subscription ends, the home locks: Settings stays open and nothing is deleted
   for 90 days. Renewing brings everything back.
 
 ## Using Vesta fairly

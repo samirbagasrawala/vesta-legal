@@ -25,7 +25,7 @@ tap Resend.
 **How do I add my cook, driver or cleaner?** Settings → Invite. They sign in
 with the number you entered and join your home straight away.
 
-**How do I pay for Vesta Plus?** Settings → Vesta Plus. Payment goes through
+**How do I pay for Vesta?** Settings → Vesta subscription. Payment goes through
 Apple or Google. To cancel, use your phone's subscription settings (on iPhone:
 Settings → your name → Subscriptions; on Android: Play Store → Payments &
 subscriptions). When a plan ends, nothing is deleted.
