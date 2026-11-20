@@ -9,4 +9,5 @@ messages and voice notes, in any Indian language, into the grocery list and
 tasks.
 
 - [Privacy policy](privacy/)
+- [Terms of use](terms/)
 - [Support](support/)
